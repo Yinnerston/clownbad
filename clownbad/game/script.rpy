@@ -4,12 +4,28 @@
 # name of the character.
 
 # TODO: Define colours for each character
+image clown_i = im.FactorScale("side clown neutral.png", 0.4)
 define narrator = Character("Narrator")
 define clown = Character("Clown Puppet", color="#ff2d00")
-define ghost = Character("Ghost", color="#71b4ff")
-define hamlet = Character("Hamlet", color="#ffdc00")
 
+define ghost = Character("Ghost", color="#71b4ff", image="ghost")
+define hamlet = Character("Hamlet", color="#ffdc00", image="hamlet")
 # The game starts here.
+
+
+transform change_transform(old, new):
+    contains:
+        old
+        yalign 1.0
+        xpos 0.0 xanchor 0.0
+        linear 0.2 xanchor 1.0
+    contains:
+        new
+        yalign 1.0
+        xpos 0.0 xanchor 1.0
+        linear 0.2 xanchor 0.0
+
+define config.side_image_change_transform = change_transform
 
 label start:
 
@@ -17,28 +33,30 @@ label start:
     # add a file (named either "bg room.png" or "bg room.jpg") to the
     # images directory to show it.
 
-    scene bg london
+    scene bg puppets
 
     # This shows a character sprite. A placeholder is used, but you can
     # replace it by adding a file named "eileen happy.png" to the images
     # directory.
 
-    show eileen happy
-    with None
-    show owo pog at truecenter 
-    with dissolve
+    # show eileen happy
+    # with None
+    # show owo pog at truecenter 
+    # with dissolve
 
     # These display lines of dialogue.
     menu:
         "You try to tell a joke (it’s not very funny)":
+            show clown_i at left
             "So did anybody see that clown with the massive badonkers?  Yeah, I guess you can say that they had three honkers."
-
+            hide clown_i
+    
+    
     narrator " London.  A fantastical place, where there’s citywide climate control (set to constant rain), a place where you can buy a meal deal for 3.50£, and be marginally less depressed afterwards."
 
     menu:
         "Chorus - was there even a chorus in the play?":
-            # TODO: Add chorus
-            # play sound "audio\chorus.ogg"
+            play sound "audio/chorus.mp3"
             "sussy"
     menu:
         "it was - where was this play set?":
@@ -64,7 +82,8 @@ label start:
             "… the old king just… died?"
     menu:
         "honestly, if I were the King, I would’ve just taken the L, instead of, you know, haunting the castle like a little bitch":
-            show L ratio at truecenter
+            image ratio = "L ratio.jpg"
+            show ratio at truecenter
             "Tales soon spread of an apparition stalking the battlements."
         "god imagine dying, only to haunt Denmark":
             "Rumours arose that a phantom, bearing the King’s own armour, haunted the battlements."
@@ -84,7 +103,8 @@ label start:
             # with dissolve / rotate?
             "You have perished from too much thamussy."
             jump you_died
-    scene bg hamlet
+    scene bg hamlet:
+        zoom 1.5
     menu:
         "the ghost went all like “avveeeeengge me hamlettttt":
             "The ghost told Hamlet of his poisoning at the hands of his brother."
@@ -117,8 +137,9 @@ label start:
 
     label route_a_post:
         pass
-    ghost "Curses, why did I have to haunt this battlement of all places?  I knew I should’ve haunted that orchard."
-    hamlet "Who’s there?"
+    ghost neutral "Curses, why did I have to haunt this battlement of all places?  I knew I should’ve haunted that orchard."
+    hamlet neutral "Who’s there?"
+    
     ghost "Ah, Hamlet, my son, look, I need you to do me a favour - right?  Kill your uncle - the twat deserves it after he poured poison down my ear."
     hamlet "I…what"
     # do close curtains transformation
@@ -131,8 +152,9 @@ label start:
     
     # Only die for horny ofc
     label you_died:
+        play sound "audio/sadtrombone.mp3"
         scene bg death
-        # play sad_trombone.mp3
+        pause
         # ^ do-do-doo-dooo
         # funny skeleton
     label close_curtains:
